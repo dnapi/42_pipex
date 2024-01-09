@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int main()
+
+int pipe_fun(void)
 {
     int fd[2];
-    int fd2[2];
     pid_t pid;
-    pid_t pid2;
-    char buffer[13];
+    char buffer[14];
 
     if (pipe(fd) == -1)
     {
@@ -25,21 +24,74 @@ int main()
 
     if (pid == 0)
     {
-        close(fd[0]); // close the read end of the pipe
+        close(fd[0]);
         write(fd[1], "Hello parent!", 13);
-        close(fd[1]); // close the write end of the pipe
-        exit(EXIT_SUCCESS);
+        close(fd[1]); 
     }
     else
     {
-        close(fd[1]); // close the write end of the pipe
+        close(fd[1]);
         read(fd[0], buffer, 13);
-        close(fd[0]); // close the read end of the pipe
+        close(fd[0]);
         printf("Message from child: ->%s<-\n", buffer);
-        exit(EXIT_SUCCESS);
     }
+	
+	return (0);
+}
+
+int main()
+{
+	pipe_fun();
+	pipe_fun();
+
+	while (1)
+	{
+	}
+	return (0);
+}
 
 /*
+int main()
+{
+    int fd[2];
+    int fd2[2];
+    pid_t pid;
+    pid_t pid2;
+    char buffer[14];
+
+    if (pipe(fd) == -1)
+    {
+        perror("pipe");
+        exit(EXIT_FAILURE);
+    }
+
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+
+    if (pid == 0)
+    {
+        close(fd[0]);
+        write(fd[1], "Hello parent!", 13);
+        close(fd[1]); 
+    }
+    else
+    {
+        close(fd[1]);
+        read(fd[0], buffer, 13);
+        close(fd[0]);
+        printf("Message from child: ->%s<-\n", buffer);
+    }
+
+	
+    if (pipe(fd2) == -1)
+    {
+        perror("pipe");
+        exit(EXIT_FAILURE);
+    }
     pid2 = fork();
     if (pid2 == -1)
     {
@@ -52,15 +104,20 @@ int main()
         close(fd2[0]); // close the read end of the pipe
         write(fd2[1], "Hello parent!", 13);
         close(fd2[1]); // close the write end of the pipe
-        exit(EXIT_SUCCESS);
     }
     else
     {
         close(fd2[1]); // close the write end of the pipe
         read(fd2[0], buffer, 13);
         close(fd2[0]); // close the read end of the pipe
-        printf("Message from child: ->%s<-\n", buffer);
-        exit(EXIT_SUCCESS);
+        printf("Second fork msg from child: ->%s<-\n", buffer);
     }
-*/
+	while (1)
+	{
+	}
+
+	return (0);
+
 }
+*/
+

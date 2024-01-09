@@ -3,9 +3,11 @@
 #include <unistd.h>
 
 int main() {
-    char *programPath = "ls";
+    char *programPath = "/bin/cat";
+    char *args[] = { "cat", NULL }; // Command-line arguments for the program
+//    char *programPath = "ls";
 //    char *programPath = "/usr/bin/ls";
-    char *args[] = { "ls", "-l", NULL }; // Command-line arguments for the program
+//    char *args[] = { "ls", "-l", NULL }; // Command-line arguments for the program
 
     // Execute the program
     if (execve(programPath, args, NULL) == -1) {
