@@ -15,7 +15,15 @@
 #  define ENOENT 2
 # endif
 
-#include "pipex.h"
+# define READ_END 0;
+# define WRITE_END 1;
+
+typedef struct s_str
+{
+	int cmd;
+	int	*pids;
+	int last_in;
+} t_str;
 
 
 #endif 

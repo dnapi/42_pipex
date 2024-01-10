@@ -11,6 +11,7 @@ https://reactive.so/post/42-a-comprehensive-guide-to-pipex
 https://dev.to/herbievine/42-a-comprehensive-guide-to-pipex-5165
 
 
+https://stackoverflow.com/questions/8389033/implementation-of-multiple-pipes-in-c
 
 
 open: <fcntl.h>

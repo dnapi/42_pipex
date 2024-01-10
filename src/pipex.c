@@ -3,55 +3,49 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-    int num_processes = 3;
+    int num = 3;
 	int	i;
-	int		fd_in;
-	int		fd_out;
-	pid_t	pid;
-	int	fd[2];
+	int		fd_file;
+	int		fd[2];
+	pid_t	pid[5];
     char *cat = "/bin/cat";
     char *args[] = { "cat", NULL };
+//   char *sleep = "/bin/cat";
+//   char *args_sleep[] = { "sleep", "2",  NULL };
 
-
-//	printf("in=%s, out = %s \n", argv[1], argv[argc - 1]);
-//	exit (0);
-
-	fd_in = open(argv[1], O_RDONLY);
-	if (fd_in == -1)
+	fd_file = open(argv[1], O_RDONLY);
+	if (fd_file == -1)
 		strerror(ENOENT);
-	fd_out = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	dup2(fd_in, 0);
-	dup2(fd_out, 1);
-
+	dup2(fd_file, STDIN_FILENO);
+	close(fd_file);
 	(void) envp;
 
-//	execve(cat, args, NULL);
-//	exit (0);
-//	ft_printf("envp[0]=->%s<-\n",envp[0]);
 	i = -1;
-    while (++i < num_processes) 
+    while (++i < num)
 	{
 		pipe(fd);
-        pid = fork();
-
-		if (pid > 0)
+		if (i == num - 1)
 		{
-        	waitpid(pid, NULL, 0);
 			close(fd[1]);
-			dup2(fd[0], 0);
-            ft_printf("Hi from parent? %d: My PID is %d\n", i + 1, getpid());
-			ft_printf("I am parent. Just stoped waiting for pid=%d\n", pid);
-			close(fd[0]);
+			fd[1]  = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 		}
-		else if (pid == 0) // child
+        pid[i] = fork();
+		if (pid[i] == 0) // child
 		{
+			write(2, "start\n", 6);
+			dup2(fd[1], STDOUT_FILENO);
 			close(fd[0]);
-			dup2(fd[1], 1);
-            ft_printf("Child i=%d: My PID is %d\n", i + 1, getpid());
-			execve(cat, args, NULL);
 			close(fd[1]);
-//			sleep(5);
+//			sleep(25);
+			execve(cat, args, NULL);
+			write(2, "end\n", 4);
             exit(0);
+		}
+		else if (pid[i] > 0)
+		{
+			dup2(fd[0], STDIN_FILENO);
+			close(fd[0]);
+			close(fd[1]);
 		}
         else // fork error 
 		{
@@ -59,12 +53,14 @@ int	main(int argc, char *argv[], char *envp[])
             return 1;
         }
     }
-	dup2(fd_out, 1);
-	ft_printf("Parent: no more children! i+1=%d: My PID is %d\n", i + 1, getpid());
-	execve(cat, args, NULL);
 
-	while (1)
-	{
-	}
+
+	waitpid(pid[0], NULL, 0);
+	waitpid(pid[1], NULL, 0);
+	waitpid(pid[2], NULL, 0);
+
+	write(2, "end\n", 4);
+//	while (1)
+//		;
 	exit (0);
 }
