@@ -1,9 +1,10 @@
 //#include "pipex.h"
 #include "../include/pipex.h"
-#include <stdio.h>
 #include <unistd.h>
+//#include <stdio.h>
+//#include <unistd.h>
 
-void	pipex(int argc, char *argv[], char *envp[])
+int	pipex(int argc, char *argv[], char *envp[])
 {
 	int	i;
 	int	fd[2];
@@ -12,6 +13,7 @@ void	pipex(int argc, char *argv[], char *envp[])
   char  **arg;
   char  *cmd;
   int flag;
+  int flag_w;
 
 	fd[0] = open(argv[1], O_RDONLY);
 	if (fd[0] == -1)
@@ -36,14 +38,18 @@ void	pipex(int argc, char *argv[], char *envp[])
         pid = fork();
 		if (pid == 0) // child
 		{
-     // exit(127);
+     // exit(127);
 			dup2(fd[1], STDOUT_FILENO);
 			close(fd[0]);
 			close(fd[1]);
       arg = ft_split(argv[i + 2], ' ');
       cmd = ft_strjoin("/bin/", *arg);
-			execve(cmd, arg, envp);
-      perror("execve"); 
+			(void)arg;
+			(void)cmd;
+			(void)envp;
+//			execve(cmd, arg, envp);
+  //    perror("execve");
+//			sleep(5);
       exit(42);
 		}
 		else if (pid > 0)
@@ -52,33 +58,30 @@ void	pipex(int argc, char *argv[], char *envp[])
 			close(fd[0]);
 			close(fd[1]);
 		}
-    else
-     perror("fork");
+		else
+			perror("fork");
   }
   
   flag = 11;
-	waitpid(pid, &flag, 0);
-//	waitpid(pid[2], NULL, 0);
-/*  if (flag == 127)
-    write(2, "error 127\n", 10);
-  else
-    write(2, "error != 127\n", 14);
-*/
-  exit (flag);
+	flag_w = waitpid(pid, &flag, 0);
+	ft_printf("flag_w=%d\n",flag_w);
+	ft_printf("flag=%d\n",flag);
 
+  return (flag);
 }
 
 int	main(int argc, char *argv[], char *envp[])
 {
+	int	status;
  //   char *cat = "/bin/cat";
   //  char *args[] = { "cat", NULL };
   //   char *sleep = "/bin/cat";
   //
 
-  pipex(argc, argv, envp);
+  status = pipex(argc, argv, envp);
 
 //	write(2, "end\n", 4);
 //	while (1)
 //		;
-	exit (24);
+	return (status);
 }
