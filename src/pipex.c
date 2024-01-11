@@ -5,9 +5,9 @@
 
 void	pipex(int argc, char *argv[], char *envp[])
 {
-  int i;
-  int fd[2];
-  pid_t pid;
+	int	i;
+	int	fd[2];
+	pid_t	pid;
 
   char  **arg;
   char  *cmd;
