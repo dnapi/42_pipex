@@ -9,6 +9,8 @@ char	*make_cmd(t_pipex *ppx, char *cmd_name)
 	int		i;
 
 	i = -1;
+	if (access(cmd_name, F_OK | X_OK) == 0)
+			return (cmd_name);
 	while (ppx->paths[++i])
 	{
 		cmd_temp = ft_strjoin(ppx->paths[i], "/");
@@ -17,8 +19,6 @@ char	*make_cmd(t_pipex *ppx, char *cmd_name)
 		if (access(cmd, F_OK | X_OK) == 0)
 			return (cmd);
 	}
-//    cmd = ft_strjoin("/bin/", *arg);
-
 	return (cmd_name);
 }
 
@@ -27,11 +27,12 @@ void child_process(t_pipex *ppx, int fd[2], int i)
 	char  **arg;
 	char  *cmd;
 
+	if (!i && ppx->fd_in == -1)
+		exit (1);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
 	close(fd[1]);
 	arg = ft_split(ppx->argv[i + 2], ' ');
-//    cmd = ft_strjoin("/bin/", *arg);
 	cmd = make_cmd(ppx, *arg);
 	execve(cmd, arg, ppx->envp);
 	perror(cmd);
@@ -53,7 +54,6 @@ int	pipex(t_pipex *ppx)
 	pid_t	pid;
 	int status;
 
-	dup2(ppx->fd_in, STDIN_FILENO);
 	i = -1;
     while (++i < ppx->argc - 3)
 	{
@@ -85,6 +85,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 	status = 0;
 	ppx = init_pipex(argc, argv, envp);
+//	if (ppx->fd_in > -1)
+	dup2(ppx->fd_in, STDIN_FILENO);
 //	printf("ppx->argc=%d\n", ppx->argc);
 	status = pipex(ppx);
 
