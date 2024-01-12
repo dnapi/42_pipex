@@ -5,7 +5,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 SRC_DIR = src/
 INC_DIR = include/
 
-SRC_NAMES =	pipex.c
+SRC_NAMES =	pipex.c pipex_utils.c
 
 FLAGS = -Wall -Wextra -Werror
 

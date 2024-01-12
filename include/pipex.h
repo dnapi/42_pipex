@@ -18,12 +18,20 @@
 # define READ_END 0;
 # define WRITE_END 1;
 
-typedef struct s_str
+typedef struct s_pipex
 {
-	int cmd;
-	int	*pids;
-	int last_in;
-} t_str;
+	char	***cmd;
+	int		num_cmd;
+	char	**paths;
+	int		*pids;
+	int		fd_in;
+	int		fd_out;
+	int		argc;
+	char	**argv;
+	char	**envp;
+} t_pipex;
 
+int is_path_defined(char *envp[]);
+t_pipex *init_pipex(int argc, char *argv[], char *envp[]);
 
 #endif 

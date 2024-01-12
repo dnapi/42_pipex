@@ -1,87 +1,92 @@
 //#include "pipex.h"
 #include "../include/pipex.h"
 #include <unistd.h>
-//#include <stdio.h>
-//#include <unistd.h>
 
-int	pipex(int argc, char *argv[], char *envp[])
+char	*make_cmd(t_pipex *ppx, char *cmd_name)
+{
+	char	*cmd;
+	char	*cmd_temp;
+	int		i;
+
+	i = -1;
+	while (ppx->paths[++i])
+	{
+		cmd_temp = ft_strjoin(ppx->paths[i], "/");
+		cmd = ft_strjoin(cmd_temp, cmd_name);
+		free(cmd_temp);
+		if (access(cmd, F_OK | X_OK) == 0)
+			return (cmd);
+	}
+//    cmd = ft_strjoin("/bin/", *arg);
+
+	return (cmd_name);
+}
+
+void child_process(t_pipex *ppx, int fd[2], int i)
+{
+	char  **arg;
+	char  *cmd;
+
+	dup2(fd[1], STDOUT_FILENO);
+	close(fd[0]);
+	close(fd[1]);
+	arg = ft_split(ppx->argv[i + 2], ' ');
+//    cmd = ft_strjoin("/bin/", *arg);
+	cmd = make_cmd(ppx, *arg);
+	execve(cmd, arg, ppx->envp);
+	perror(cmd);
+	exit(42);
+}
+
+
+void parent_process(int fd[2])
+{
+			dup2(fd[0], STDIN_FILENO);
+			close(fd[0]);
+			close(fd[1]);
+}
+
+int	pipex(t_pipex *ppx)
 {
 	int	i;
 	int	fd[2];
 	pid_t	pid;
+	int status;
 
-  char  **arg;
-  char  *cmd;
-  int flag;
-  int flag_w;
-
-	fd[0] = open(argv[1], O_RDONLY);
-	if (fd[0] == -1)
-  {
-    ft_printf("er num=%d\n", ENOENT);
-		strerror(ENOENT);
-    perror(argv[1]);
-		exit(ENOENT);
-  }
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-
+	dup2(ppx->fd_in, STDIN_FILENO);
 	i = -1;
-    while (++i < argc - 3)
+    while (++i < ppx->argc - 3)
 	{
 		pipe(fd);
-		if (i == argc - 4)
+		if (i == ppx->argc - 4)
 		{
 			close(fd[1]);
-			fd[1]  = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+			fd[1] = ppx->fd_out;
 		}
         pid = fork();
-		if (pid == 0) // child
-		{
-     // exit(127);
-			dup2(fd[1], STDOUT_FILENO);
-			close(fd[0]);
-			close(fd[1]);
-      arg = ft_split(argv[i + 2], ' ');
-      cmd = ft_strjoin("/bin/", *arg);
-			(void)arg;
-			(void)cmd;
-			(void)envp;
-//			execve(cmd, arg, envp);
-  //    perror("execve");
-//			sleep(5);
-      exit(42);
-		}
+		if (pid == 0)
+			child_process(ppx, fd, i);
 		else if (pid > 0)
-		{
-			dup2(fd[0], STDIN_FILENO);
-			close(fd[0]);
-			close(fd[1]);
-		}
+			parent_process(fd);
 		else
-			perror("fork");
-  }
-  
-  flag = 11;
-	flag_w = waitpid(pid, &flag, 0);
-	ft_printf("flag_w=%d\n",flag_w);
-	ft_printf("flag=%d\n",flag);
-
-  return (flag);
+			perror("Fork");
+	}
+	waitpid(pid, &status, 0);
+	return (status);
 }
 
 int	main(int argc, char *argv[], char *envp[])
 {
+	t_pipex	*ppx;
 	int	status;
- //   char *cat = "/bin/cat";
-  //  char *args[] = { "cat", NULL };
-  //   char *sleep = "/bin/cat";
-  //
 
-  status = pipex(argc, argv, envp);
+	if (argc < 5)
+		return (1);
 
-//	write(2, "end\n", 4);
-//	while (1)
-//		;
+	status = 0;
+	ppx = init_pipex(argc, argv, envp);
+//	printf("ppx->argc=%d\n", ppx->argc);
+	status = pipex(ppx);
+
 	return (status);
 }
