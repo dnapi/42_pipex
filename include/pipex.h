@@ -34,4 +34,6 @@ typedef struct s_pipex
 int is_path_defined(char *envp[]);
 t_pipex *init_pipex(int argc, char *argv[], char *envp[]);
 
+char  **get_args(char *commands);
+
 #endif 

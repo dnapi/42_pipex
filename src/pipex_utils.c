@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+//#include "pipex.h"
+#include "../include/pipex.h"
 
 int	is_path_defined(char *envp[])
 {

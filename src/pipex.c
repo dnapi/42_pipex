@@ -32,11 +32,14 @@ void child_process(t_pipex *ppx, int fd[2], int i)
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
 	close(fd[1]);
-	arg = ft_split(ppx->argv[i + 2], ' ');
+//	arg = ft_split(ppx->argv[i + 2], ' ');
+	arg = get_args(ppx->argv[i + 2]);
 	cmd = make_cmd(ppx, *arg);
+//	exit(127);
 	execve(cmd, arg, ppx->envp);
 	perror(cmd);
-	exit(42);
+//  write(2,"error\n", 6);
+	exit(1);
 }
 
 
@@ -71,7 +74,10 @@ int	pipex(t_pipex *ppx)
 		else
 			perror("Fork");
 	}
-	waitpid(pid, &status, 0);
+  while (pid >0)
+    pid = wait(&status);
+	//waitpid(pid, &status, 0);
+  //status = 42;
 	return (status);
 }
 
@@ -85,10 +91,14 @@ int	main(int argc, char *argv[], char *envp[])
 
 	status = 0;
 	ppx = init_pipex(argc, argv, envp);
-//	if (ppx->fd_in > -1)
+	if (ppx->fd_out == -1)
+    return (1);
 	dup2(ppx->fd_in, STDIN_FILENO);
 //	printf("ppx->argc=%d\n", ppx->argc);
 	status = pipex(ppx);
+  
+ // while (1)
+   // ;
 
 	return (status);
 }
