@@ -32,14 +32,23 @@ void child_process(t_pipex *ppx, int fd[2], int i)
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
 	close(fd[1]);
-//	arg = ft_split(ppx->argv[i + 2], ' ');
-	arg = get_args(ppx->argv[i + 2]);
+	cmd = ppx->argv[i + 2];
+	if (access(cmd, F_OK | X_OK) == 0 || ft_strchr(cmd, '\''))
+	{
+		arg = (char **)malloc(sizeof(char *) * 2);
+		arg[0] = ft_strdup(cmd);
+		arg[1] = NULL;
+	}
+	else
+		arg = ft_split(cmd, ' ');
+//	arg = get_args(ppx->argv[i + 2]);
 	cmd = make_cmd(ppx, *arg);
-//	exit(127);
+//	write(2, cmd, 20);
+//	write(2, "\n\n", 2);
 	execve(cmd, arg, ppx->envp);
-	perror(cmd);
-//  write(2,"error\n", 6);
-	exit(1);
+	//perror(cmd);
+	write(2, "zsh: command not found\n", 24);
+	exit(127);
 }
 
 
@@ -74,11 +83,13 @@ int	pipex(t_pipex *ppx)
 		else
 			perror("Fork");
 	}
-  while (pid >0)
-    pid = wait(&status);
-	//waitpid(pid, &status, 0);
-  //status = 42;
-	return (status);
+//  while (pid >0)
+//    pid = wait(&status);
+	waitpid(pid, &status, 0);
+	//return (WIFEXITED(status));
+//	return (WEXITSTATUS(status));
+//	return (status);
+	return ((status & 0xff00) >> 8);
 }
 
 int	main(int argc, char *argv[], char *envp[])
