@@ -19,7 +19,9 @@ char	*make_cmd(t_pipex *ppx, char *cmd_name)
 		if (access(cmd, F_OK | X_OK) == 0)
 			return (cmd);
 	}
-	return (cmd_name);
+	free(cmd);
+	cmd = ft_strdup(cmd_name);
+	return (cmd);
 }
 
 void child_process(t_pipex *ppx, int fd[2], int i)
@@ -43,14 +45,18 @@ void child_process(t_pipex *ppx, int fd[2], int i)
 		arg = ft_split(cmd, ' ');
 //	arg = get_args(ppx->argv[i + 2]);
 	cmd = make_cmd(ppx, *arg);
-//	write(2, cmd, 20);
-//	write(2, "\n\n", 2);
+// make if condition for error case if execve == -1  clean all
 	execve(cmd, arg, ppx->envp);
 	//perror(cmd);
-	write(2, "zsh: command not found\n", 24);
+	if (arg)
+		ft_free_char2d(arg);
+	if (cmd)
+		free(cmd);
+	write(2, "zsh: command not found: ", 24);
+	write(2, cmd, ft_strlen(cmd));
+	write(2, "\n", 1);
 	exit(127);
 }
-
 
 void parent_process(int fd[2])
 {
@@ -83,12 +89,11 @@ int	pipex(t_pipex *ppx)
 		else
 			perror("Fork");
 	}
-//  while (pid >0)
-//    pid = wait(&status);
-	waitpid(pid, &status, 0);
-	//return (WIFEXITED(status));
-//	return (WEXITSTATUS(status));
-//	return (status);
+//	waitpid(pid, &status, 0);
+// use array of pids to get the status of last process	
+	while (wait(&status) > 0)
+		;
+	
 	return ((status & 0xff00) >> 8);
 }
 
@@ -103,13 +108,18 @@ int	main(int argc, char *argv[], char *envp[])
 	status = 0;
 	ppx = init_pipex(argc, argv, envp);
 	if (ppx->fd_out == -1)
-    return (1);
+	{
+		if (ppx->paths)
+	        ft_free_char2d(ppx->paths);
+	    return (1);
+	}
 	dup2(ppx->fd_in, STDIN_FILENO);
-//	printf("ppx->argc=%d\n", ppx->argc);
 	status = pipex(ppx);
+	if (ppx->paths)
+		ft_free_char2d(ppx->paths);
   
- // while (1)
-   // ;
+// while (1)
+  // ;
 
 	return (status);
 }

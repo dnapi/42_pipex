@@ -20,10 +20,10 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ) $(LIBFT) 
-	cc $(FLAGS) $(OBJ) $(LIBFT) $(HEADERS) -o $(NAME)
+	cc $(FLAGS) $(OBJ) $(LIBFT) $(HEADERS) -o $(NAME) -g
 
 %.o: %.c
-	cc $(FLAGS) -c $^ -o $@ $(HEADERS)
+	cc $(FLAGS) -c $^ -o $@ $(HEADERS) -g
 	
 
 clean:

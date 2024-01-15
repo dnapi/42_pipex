@@ -1,6 +1,8 @@
 //#include "pipex.h"
 #include  "../include/pipex.h"
 
+
+/*
 char	**this_is_awkward(char *commands)
 {
 	char	**awk_args;
@@ -30,12 +32,14 @@ char	**get_args(char *commands)
 		args = ft_split(commands, ' ');
 	return (args);
 }
+*/
 
 void	ft_free_char2d(char **split)
 {
 	size_t	i;
 
 	i = 0;
+	//remove unused function above
 	while (split[i])
 	{
 		free(split[i]);
@@ -43,3 +47,5 @@ void	ft_free_char2d(char **split)
 	}
 	free(split);
 }
+
+
