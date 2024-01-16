@@ -23,7 +23,7 @@ typedef struct s_pipex
 //	char	***cmd;
 	int		num_cmd;
 	char	**paths;
-//	int		*pids;
+	int		*pids;
 	int		fd_in;
 	int		fd_out;
 	int		argc;
@@ -31,11 +31,10 @@ typedef struct s_pipex
 	char	**envp;
 } t_pipex;
 
-int is_path_defined(char *envp[]);
-t_pipex *init_pipex(int argc, char *argv[], char *envp[]);
-
-
-//char  **get_args(char *commands);
+int		is_path_defined(char *envp[]);
+t_pipex	*init_pipex(int argc, char *argv[], char *envp[]);
+void	free_pipex(t_pipex *ppx);
 void	ft_free_char2d(char **split);
+int pipex(t_pipex *ppx);
 
 #endif 

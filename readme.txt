@@ -1,3 +1,13 @@
+env -i   -> segm fault
+./pipex  nonexisting  noexisting nonexisting  file
+
+a) fd leaks
+	You can add the line while (1); right before your program ends. 
+	lsof -c pipex
+
+b) memory leaks
+	flag      -fsanitize=address
+
 
 Advanced Programming in the Unix Environment, Richard Stevens
 codes http://www.apuebook.com/code3e.html
@@ -10,7 +20,7 @@ https://medium.com/@lannur-s/pipex-42-chapter-1-metamorphosis-execve-1a4710ab8cb
 https://reactive.so/post/42-a-comprehensive-guide-to-pipex
 https://dev.to/herbievine/42-a-comprehensive-guide-to-pipex-5165
 
-
+https://github.com/madebypixel02/pipex
 https://stackoverflow.com/questions/8389033/implementation-of-multiple-pipes-in-c
 
 
