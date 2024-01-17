@@ -9,8 +9,7 @@ SRC_NAMES =	main.c pipex.c pipex_utils.c
 SRC_NAMES_B = main_bonus.c pipex.c pipex_utils.c
 
 FLAGS = -Wall -Wextra -Werror
-FLAGS_DBG = -Wall -Wextra -Werror -g -fsanitize=address
-FLAGS_G = -Wall -Wextra -Werror -g
+FLAGS_G = -Wall -Wextra -Werror -g -fsanitize=address
 
 SRC = $(addprefix $(SRC_DIR), $(SRC_NAMES))
 SRC_B = $(addprefix $(SRC_DIR), $(SRC_NAMES_B))
@@ -25,10 +24,10 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ) $(LIBFT) 
-	cc $(FLAGS_G) $(OBJ) $(LIBFT) $(HEADERS) -o $(NAME)
+	cc $(FLAGS) $(OBJ) $(LIBFT) $(HEADERS) -o $(NAME)
 
 %.o: %.c
-	cc $(FLAGS_G) -c $^ -o $@ $(HEADERS)
+	cc $(FLAGS) -c $^ -o $@ $(HEADERS)
 
 bonus: .bonus
 
