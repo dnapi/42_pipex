@@ -5,12 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: apimikov <apimikov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/16 18:11:48 by apimikov          #+#    #+#             */
-/*   Updated: 2024/01/16 18:11:51 by apimikov         ###   ########.fr       */
+/*   Created: 2024/01/17 11:11:33 by apimikov          #+#    #+#             */
+/*   Updated: 2024/01/17 11:41:27 by apimikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	error_outfile(char *str)
+{
+	write(2, "zsh: permission denied: ", 24);
+	write(2, str, ft_strlen(str));
+	write(2, "\n", 1);
+}
+
+void	ft_free_char2d(char **split)
+{
+	size_t	i;
+
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
 
 int	main(int argc, char *argv[], char *envp[])
 {
@@ -30,21 +50,9 @@ int	main(int argc, char *argv[], char *envp[])
 	close(ppx->fd_in);
 	status = pipex(ppx);
 	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
 	if (ppx->paths)
 		ft_free_char2d(ppx->paths);
+	if (ppx->fd_out == -1)
+		error_outfile(argv[argc - 1]);
 	return (status);
-}
-
-void	ft_free_char2d(char **split)
-{
-	size_t	i;
-
-	i = 0;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
 }

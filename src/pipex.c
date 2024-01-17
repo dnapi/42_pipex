@@ -6,7 +6,7 @@
 /*   By: apimikov <apimikov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 10:35:22 by apimikov          #+#    #+#             */
-/*   Updated: 2024/01/16 18:05:38 by apimikov         ###   ########.fr       */
+/*   Updated: 2024/01/17 10:02:20 by apimikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	child_process(t_pipex *ppx, int fd[2], int i)
 	char	**arg;
 	char	*cmd;
 
-	if (!i && ppx->fd_in == -1)
+	if ((!i && ppx->fd_in == -1) || (i == ppx->argc - 4 && ppx->fd_out == -1))
 		exit (1);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
@@ -100,7 +100,8 @@ int	pipex(t_pipex *ppx)
 		else
 			perror("Fork");
 	}
-	while (--i > 0)
+	i = -1;
+	while (++i < ppx->argc - 3)
 		waitpid(ppx->pids[i], &status, 0);
 	return ((status & 0xff00) >> 8);
 }

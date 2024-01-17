@@ -1,4 +1,4 @@
-env -i   -> segm fault
+env -i ...   -> segm fault
 ./pipex  nonexisting  noexisting nonexisting  file
 
 a) fd leaks
@@ -7,6 +7,10 @@ a) fd leaks
 
 b) memory leaks
 	flag      -fsanitize=address
+	valgrind --leak-check=full ./my_program
+
+c) env -i ...
+	unset PATH
 
 
 Advanced Programming in the Unix Environment, Richard Stevens

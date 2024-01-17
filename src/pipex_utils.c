@@ -6,7 +6,7 @@
 /*   By: apimikov <apimikov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 06:33:46 by apimikov          #+#    #+#             */
-/*   Updated: 2024/01/16 18:07:32 by apimikov         ###   ########.fr       */
+/*   Updated: 2024/01/17 11:39:34 by apimikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,10 @@ void	open_files_pipex(t_pipex *ppx, int argc, char *argv[])
 	int	fd;
 
 	fd = open(argv[1], O_RDONLY);
+	ppx->fd_in = fd;
 	if (fd == -1)
 		perror(argv[1]);
-	ppx->fd_in = fd;
 	fd = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (fd == -1)
-		perror(argv[argc - 1]);
 	ppx->fd_out = fd;
 	return ;
 }
@@ -69,14 +67,11 @@ t_pipex	*init_pipex(int argc, char *argv[], char *envp[])
 	ppx = (t_pipex *)malloc(sizeof(t_pipex));
 	if (!ppx)
 		return (NULL);
-	ppx->num_cmd = argc - 3;
 	ppx->argv = argv;
 	ppx->envp = envp;
 	ppx->argc = argc;
 	ppx->paths = NULL;
 	open_files_pipex(ppx, argc, argv);
-	if (ppx->fd_out == -1)
-		return (NULL);
 	pids = (pid_t *)malloc(sizeof(pid_t) * (argc - 3));
 	if (!pids)
 	{
