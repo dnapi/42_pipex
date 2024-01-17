@@ -6,7 +6,7 @@
 /*   By: apimikov <apimikov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:11:33 by apimikov          #+#    #+#             */
-/*   Updated: 2024/01/17 11:41:27 by apimikov         ###   ########.fr       */
+/*   Updated: 2024/01/17 12:18:41 by apimikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,10 @@ int	main(int argc, char *argv[], char *envp[])
 	close(ppx->fd_in);
 	status = pipex(ppx);
 	close(STDIN_FILENO);
-	if (ppx->paths)
-		ft_free_char2d(ppx->paths);
+//	if (ppx->paths)
+//		ft_free_char2d(ppx->paths);
 	if (ppx->fd_out == -1)
 		error_outfile(argv[argc - 1]);
+	free_pipex(ppx);
 	return (status);
 }
