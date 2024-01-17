@@ -6,7 +6,7 @@
 /*   By: apimikov <apimikov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 06:33:46 by apimikov          #+#    #+#             */
-/*   Updated: 2024/01/17 11:39:34 by apimikov         ###   ########.fr       */
+/*   Updated: 2024/01/17 11:58:37 by apimikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ t_pipex	*init_pipex(int argc, char *argv[], char *envp[])
 
 void	free_pipex(t_pipex *ppx)
 {
+	close(ppx->fd_in);
+	close(ppx->fd_out);
 	if (ppx->paths)
 		ft_free_char2d(ppx->paths);
 	if (ppx->pids)
