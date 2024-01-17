@@ -6,7 +6,7 @@
 /*   By: apimikov <apimikov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:06:26 by apimikov          #+#    #+#             */
-/*   Updated: 2024/01/17 11:06:47 by apimikov         ###   ########.fr       */
+/*   Updated: 2024/01/17 14:26:55 by apimikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include <string.h>
+# include <stdio.h>
 # include <sys/wait.h>
 # include "libft.h"
 

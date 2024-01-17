@@ -6,7 +6,7 @@
 /*   By: apimikov <apimikov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 06:33:46 by apimikov          #+#    #+#             */
-/*   Updated: 2024/01/17 12:15:58 by apimikov         ###   ########.fr       */
+/*   Updated: 2024/01/17 13:44:01 by apimikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,9 @@ void	free_pipex(t_pipex *ppx)
 {
 	if (!ppx)
 		return ;
-//	close(ppx->fd_in);
-//	close(ppx->fd_out);
 	if (ppx->paths)
 		ft_free_char2d(ppx->paths);
 	if (ppx->pids)
 		free(ppx->pids);
 	free(ppx);
 }
-
