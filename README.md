@@ -1,10 +1,6 @@
-# 42_pipex
-School 42 project
-
-
 # Project Description: Pipex
 
-In the `pipex` project of school 42,  I have created simplified version of the shell's pipe functionality in C  programming language. The goal is to implement a program that can execute two or more commands provided as arguments, simulating the behavior of the shell when using the `|` operator. List ofof allowed function include : open, close, read, write, malloc, free, perror, strerror, access, dup, dup2, execve, exit, fork, pipe, unlink, wait, waitpid.
+In the `pipex` project of 42 School @ [Hive Helsinki](https://www.hive.fi/en/),  I have created simplified version of the shell's pipe functionality in C  programming language. The goal is to implement a program that can execute two or more commands provided as arguments, simulating the behavior of the shell when using the `|` operator. List ofof allowed function include : open, close, read, write, malloc, free, perror, strerror, access, dup, dup2, execve, exit, fork, pipe, unlink, wait, waitpid.
 
 ## Key Tasks and Features
 
