@@ -31,14 +31,19 @@ The goal is to gain a better understanding of process creation, interprocess com
 The `pipex` program to replicate the behavior of shell pipelinesi
 ```bash
 ./pipex file1 cmd1 cmd2 cmd3 file2
+```
 
 For example:
 ```bash
 ./pipex input.txt "grep hello" "wc -l" "cat" output.txt
+```
 
 
 Our implementation handles  multiple pipes:
 ``bash
 ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
+```
 That behave like:
+```
 < file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2
+```
