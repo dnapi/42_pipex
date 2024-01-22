@@ -23,27 +23,32 @@ all: $(NAME)
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
-$(NAME): $(OBJ) $(LIBFT) 
+$(NAME): $(OBJ) $(LIBFT) .name 
 	cc $(FLAGS) $(OBJ) $(LIBFT) $(HEADERS) -o $(NAME)
 
 %.o: %.c
 	cc $(FLAGS) -c $^ -o $@ $(HEADERS)
 
+.name: 
+	rm -f .bonus
+	touch .name
+
 bonus: .bonus
 
 .bonus: $(OBJ_B) $(LIBFT) 
 	cc $(FLAGS) $(OBJ_B) $(LIBFT) $(HEADERS) -o $(NAME)
+	rm -f .name
 	touch .bonus
 
 clean:
 	rm -f ${OBJ}
 	rm -f ${OBJ_B}
 	rm -f .bonus
+	rm -f .name
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 fclean: clean
 	rm -f ${NAME}
-	rm -f ${NAME_B}
 
 re: fclean all
 

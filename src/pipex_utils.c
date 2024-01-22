@@ -6,7 +6,7 @@
 /*   By: apimikov <apimikov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 06:33:46 by apimikov          #+#    #+#             */
-/*   Updated: 2024/01/17 13:44:01 by apimikov         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:14:34 by apimikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	set_path_pipex(t_pipex *pnt, char *envp[])
 	char	*str_path;
 
 	pos = -1;
+	str_path = NULL;
 	if (envp && *envp)
 		pos = is_path_defined(envp);
 	if (pos > -1 && *envp)
@@ -43,6 +44,7 @@ void	set_path_pipex(t_pipex *pnt, char *envp[])
 	if (!str_path)
 		return ;
 	pnt->paths = ft_split(str_path, ':');
+//	if (!pnt->paths)
 	free(str_path);
 }
 
