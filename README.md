@@ -32,18 +32,17 @@ The `pipex` program to replicate the behavior of shell pipelinesi
 ```bash
 ./pipex file1 cmd1 cmd2 cmd3 file2
 ```
-
 For example:
 ```bash
 ./pipex input.txt "grep hello" "wc -l" "cat" output.txt
 ```
 
 
-Our implementation handles  multiple pipes:
-``bash
+Our implementation handels, so multiple pipes:
+```bash
 ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
 ```
-That behave like:
-```
+Should behave like:
+```bash
 < file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2
 ```
